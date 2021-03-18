@@ -1,6 +1,8 @@
 # ComicCharactersMining
-
 This is the project repository for group 20 - CS5140 Data Mining
+
+`/data` : contains datasets for the project
+`/reports`: contains images, graphs, figures etc. for course's reports
 ## Colab links:
 _Only collaborators have editable links_
 
