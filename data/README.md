@@ -1,7 +1,7 @@
 ## This folder contains datasets from different sources
 
 #### `\wikia`
-https://www.kaggle.com/danoozy44/comic-characters
+https://www.kaggle.com/fivethirtyeight/fivethirtyeight-comic-characters-dataset
 
 This folder contains data behind the story Comic Books Are Still Made By Men, For Men And About Men.
 
