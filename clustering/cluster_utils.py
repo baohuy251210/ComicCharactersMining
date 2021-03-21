@@ -14,7 +14,9 @@ def plot_clusters(ax, labels, vals):
 
 #Returns the euclidean distance between pts a and b
 def dist(a, b):
-    return sqrt(sum([(ai - bi)**2 for ai, bi in zip(a, b)]))
+    x = np.array(a)
+    y = np.array(b)
+    return np.linalg.norm(x - y)
 
 #Returns the center that minimizes the distance between a point and that center
 def phi(centers, pt):
@@ -27,10 +29,12 @@ def phi(centers, pt):
             arg_min = center
     return arg_min
 
+#Finds n single-link hierarchical clusters for pts
 def single_link_cluster(pts, n_clusters):
     c = Cluster(n_clusters=n_clusters, linkage='single')
     return c.fit(pts).labels_
 
+#Finds n complete-link hierarchical clusters for pts
 def complete_lin_cluster(pts, n_clusters):
     c = Cluster(n_clusters=n_clusters, linkage='complete')
     return c.fit(pts).labels_
@@ -66,11 +70,11 @@ def k_means_pp_clustering(pts, n_centers):
         centers[i] = pts[np.random.choice(len(pts), p=probs)]
     return (centers, assign_to_centers(pts, centers))
 
+#Returns the component-wise average for a collection of pts
 def pt_average(pts):
-    x_avg = sum(pt[0] for pt in pts) / len(pts)
-    y_avg = sum(pt[1] for pt in pts) / len(pts)
-    return (x_avg, y_avg)
+    return tuple(np.mean(pts, axis=0))
 
+#Performs lloyds algorithm on a given collection of pts and centers
 def lloyds_alg(pts, centers):
     tol = 0.1
     change = tol + 1
@@ -87,20 +91,22 @@ def lloyds_alg(pts, centers):
     return (result, assign_to_centers(pts, result))
 
 #Runs Lloyd's algorithm to refine the cluster centers
-#found from Lloyd's algorithm
+#found from Gonzales algorithm
 def gonzalloyds(pts, n_centers):
     centers, _ = gonzalez_clustering(pts, n_centers)
     return lloyds_alg(pts, centers) 
 
+#k-center cost for a collection of points and centers
 def k_center_cost(centers, pts):
     return max(dist(pt, phi(centers, pt)) for pt in pts)
 
+#k-means cost for a collection of points and centers
 def k_means_cost(centers, pts):
     return sqrt((sum(dist(pt, phi(centers, pt))**2 for pt in pts))/len(pts))
 
 #Finds the minimum distance between two points in a pair of clusters
 def min_cluster_dist(a, b):
-    min_dist = float('inf')
+    min_dist = np.Inf
     for a_pt in a:
         for b_pt in b:
             min_dist = min(dist(a_pt, b_pt), min_dist)
